@@ -88,6 +88,8 @@ class Config(object):
         fix_ti={"type": "boolean", "coerce": bool, "default": False},
         stimulation_amplitude={"type": "float", "coerce": float, "default": 0},
         stimulation_frequency={"type": "float", "coerce": float, "default": 130.0},
+        pulse_width={"type": "float", "coerce": float, "default": 0.06},
+        frequency={"type": "float", "coerce": float, "default": 130.0},
         cortical_beta_mechanism={
             "type": "string",
             "coerce": (str, lambda x: x.lower()),

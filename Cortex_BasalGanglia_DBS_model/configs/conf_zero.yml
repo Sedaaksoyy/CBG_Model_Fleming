@@ -6,3 +6,5 @@ RunTime: 32000.0
 # Controller
 setpoint: 0
 ts: 0.02
+save_ctx_lfp: True
+save_ctx_voltage: True

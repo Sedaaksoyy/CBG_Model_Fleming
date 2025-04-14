@@ -81,7 +81,7 @@ if __name__ == "__main__":
     controller_sampling_time = 1000 * c.ts
     ctx_slow_modulation_amplitude = c.ctx_slow_modulation_amplitude
     ctx_slow_modulation_step_count = c.ctx_slow_modulation_step_count
-    DBS_freq = c.stimulation_frequency
+    DBS_freq = c.frequency
 
     sim_total_time = (
         steady_state_duration + simulation_runtime + timestep
@@ -96,6 +96,9 @@ if __name__ == "__main__":
         print(f"CBG Model ver {version.version}")
         print("\n------ Configuration ------")
         print(c, "\n")
+        print(f"Pulse Width: {c.pulse_width} ms\n")
+        print(f"Pulse Amplitude: {c.stimulation_amplitude} mA\n")
+        print(f"Frequency: {c.frequency} Hz\n")
 
     # Make beta band filter centred on 25Hz (cutoff frequencies are 21-29 Hz)
     # for biomarker estimation
@@ -201,7 +204,12 @@ if __name__ == "__main__":
     GPe_Pop.record("spikes")
     GPi_Pop.record("soma(0.5).v", sampling_interval=rec_sampling_interval)
     Thalamic_Pop.record("soma(0.5).v", sampling_interval=rec_sampling_interval)
-
+    STN_Pop.record("spikes")
+    Cortical_Pop.record("spikes")
+    GPe_Pop.record("spikes")
+    GPi_Pop.record("spikes")
+    Thalamic_Pop.record("spikes")
+    Interneuron_Pop.record("spikes")
     # Assign Positions for recording and stimulating electrode point sources
     recording_electrode_1_position = np.array([0, -1500, 250])
     recording_electrode_2_position = np.array([0, 1500, 250])
@@ -313,8 +321,8 @@ if __name__ == "__main__":
         last_pulse_time_prior=last_pulse_time_prior,
         dt=simulator.state.dt,
         amplitude=-1.0,
-        frequency=130.0,
-        pulse_width=0.06,
+        frequency=c.frequency,
+        pulse_width=c.pulse_width,
         offset=0,
     )
 
@@ -377,8 +385,8 @@ if __name__ == "__main__":
             last_pulse_time_prior=last_pulse_time_prior,
             dt=simulator.state.dt,
             amplitude=100.0,
-            frequency=DBS_freq,
-            pulse_width=0.06,
+            frequency=c.frequency,
+            pulse_width=c.pulse_width,
             offset=0,
         )
 
@@ -530,6 +538,7 @@ if __name__ == "__main__":
             DBS_amp = controller.update(
                 state_value=lfp_beta_average_value, current_time=simulator.state.t
             )
+            DBS_freq = c.frequency
 
         # Update the DBS Signal
         if call_index + 1 < len(controller_call_times):
@@ -542,7 +551,7 @@ if __name__ == "__main__":
                         next_DBS_pulse_time = 1e9
                     else:  # Calculate new next pulse time if DBS is on
                         T = (1.0 / DBS_freq) * 1e3
-                        next_DBS_pulse_time = last_DBS_pulse_time + T - 0.06
+                        next_DBS_pulse_time = last_DBS_pulse_time + T - c.pulse_width
 
                         # Need to check for situation when new DBS time is less than the current time
                         if next_DBS_pulse_time <= simulator.state.t:
@@ -568,7 +577,7 @@ if __name__ == "__main__":
                     dt=simulator.state.dt,
                     amplitude=-DBS_amp,
                     frequency=DBS_freq,
-                    pulse_width=0.06,
+                    pulse_width=c.pulse_width,
                     offset=0,
                 )
 
@@ -781,6 +790,13 @@ if __name__ == "__main__":
 
     w = neo.io.NeoMatlabIO(filename=str(simulation_output_dir / "DBS_Signal.mat"))
     w.write_block(DBS_Block)
+
+    STN_Pop.write_data(str(simulation_output_dir / "STN_Spikes.mat"), "spikes")
+    Cortical_Pop.write_data(str(simulation_output_dir / "Cortex_Spikes.mat"), "spikes")
+    GPe_Pop.write_data(str(simulation_output_dir / "Gpe_Spikes.mat"), "spikes")
+    GPi_Pop.write_data(str(simulation_output_dir / "Gpi_Spikes.mat"), "spikes")
+    Thalamic_Pop.write_data(str(simulation_output_dir / "Thalamic_Spikes.mat"), "spikes")
+    Interneuron_Pop.write_data(str(simulation_output_dir / "Interneuron_Spikes.mat"), "spikes")
 
     if rank == 0:
         print("Simulation Done!")

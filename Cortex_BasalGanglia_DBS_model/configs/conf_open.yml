@@ -7,3 +7,8 @@ RunTime: 32000.0
 setpoint: 0
 ts: 0.02
 stimulation_amplitude: 2.0
+pulse_width: 0.06
+frequency: 130.0
+
+save_ctx_lfp: True
+save_ctx_voltage: True

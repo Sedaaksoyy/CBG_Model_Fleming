@@ -103,7 +103,7 @@ def create_network(
     )
     Thalamic_Pop = Population(
         Pop_size,
-        Thalamic_Neuron_Type(),
+        Thalamic_Neuron_Type(bias_current_density=0.00),
         initial_values={"v": v_init},
         label="Thalamic Neurons",
     )
@@ -492,7 +492,7 @@ def load_network(
     for cell in Cortical_Pop:
         cell_offset = ctx_dc_offset
         if config.ctx_dc_offset_std > 0:
-            cell_offset += config.ctx_dc_offset_std * random_array[cell]
+            cell_offset = config.ctx_dc_offset_std * random_array[cell]
         cell.inject(
             DCSource(
                 start=steady_state_duration,

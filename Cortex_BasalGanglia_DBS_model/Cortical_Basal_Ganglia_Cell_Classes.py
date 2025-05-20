@@ -671,7 +671,7 @@ class Thalamic_Neuron_Type(NativeCellType):
         "nseg": 1,
         "Ra": 150,
         "cm": 100,
-        "bias_current_amplitude": 0,
+        "bias_current_density": 0.0,
     }
     default_initial_values = {"v": -68.0}
     recordable = ["soma(0.5).v"]

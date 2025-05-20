@@ -656,9 +656,9 @@ if __name__ == "__main__":
             print("Saving CTX voltage...")
         Cortical_Pop.write_data(str(simulation_output_dir / "Cortical_Pop" / "Cortical_Collateral_v.mat"), 'collateral(0.5).v', clear=False)
         Cortical_Pop.write_data(str(simulation_output_dir / "Cortical_Pop" / "Cortical_Soma_v.mat"), 'soma(0.5).v', clear=False)
-    # Interneuron_Pop.write_data(str(simulation_output_dir / "Interneuron_Pop/Interneuron_Soma_v.mat"), 'soma(0.5).v', clear=True)
-    # GPi_Pop.write_data(str(simulation_output_dir / "GPi_Pop/GPi_Soma_v.mat", 'soma(0.5).v'), clear=True)
-    # Thalamic_Pop.write_data(str(simulation_output_dir / "Thalamic_Pop/Thalamic_Soma_v.mat"), 'soma(0.5).v', clear=True)
+        Interneuron_Pop.write_data(str(simulation_output_dir / "Interneuron_Pop" / "Interneuron_Soma_v.mat") , 'soma(0.5).v', clear=False)
+        GPi_Pop.write_data(str(simulation_output_dir / "GPi_Pop" / "GPi_Soma_v.mat"), 'soma(0.5).v', clear=False)
+        Thalamic_Pop.write_data(str(simulation_output_dir / "Thalamic_Pop" / "Thalamic_Soma_v.mat"), 'soma(0.5).v', clear=False)
 
     if c.save_ctx_lfp:
         if rank == 0:
@@ -667,6 +667,8 @@ if __name__ == "__main__":
         Cortical_Pop.write_data(str(simulation_output_dir / "Cortical_Pop" / "Ctx_AMPA_i.mat"), "AMPA.i", clear=False)
         Interneuron_Pop.write_data(str(simulation_output_dir / "Interneuron_Pop" / "Interneuron_GABAa_i.mat"), "GABAa.i", clear=False)
         Interneuron_Pop.write_data(str(simulation_output_dir / "Interneuron_Pop" / "Interneuron_AMPA_i.mat"), "AMPA.i", clear=False)
+        Thalamic_Pop.write_data(str(simulation_output_dir / "Thalamic_Pop" / "Thalamic_GABAa_i.mat"), "GABAa.i", clear=False)
+        Thalamic_Pop.write_data(str(simulation_output_dir / "Thalamic_Pop" / "Thalamic_AMPA_i.mat"), "AMPA.i", clear=False)
 
     # Write controller values to csv files
     controller_measured_beta_values = np.asarray(controller.state_history)

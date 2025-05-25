@@ -100,6 +100,12 @@ if __name__ == "__main__":
         print(f"Pulse Amplitude: {c.stimulation_amplitude} mA\n")
         print(f"Frequency: {c.frequency} Hz\n")
 
+        print(f"Creating output directory: {output_dir}")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        with open(output_dir / "config.txt", "w") as config_output:
+            config_output.write(f"Model version: {version.version}\n")
+            config_output.write(str(c))
+
     # Make beta band filter centred on 25Hz (cutoff frequencies are 21-29 Hz)
     # for biomarker estimation
     fs = 1000.0 / rec_sampling_interval

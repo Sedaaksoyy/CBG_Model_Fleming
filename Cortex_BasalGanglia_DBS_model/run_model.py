@@ -305,9 +305,6 @@ if __name__ == "__main__":
     controller = Controller(**controller_kwargs)
 
     simulation_output_dir = output_dir
-    if rank == 0:
-        print(f"Output directory: {simulation_output_dir}")
-        simulation_output_dir.mkdir(parents=True, exist_ok=True)
 
     # Generate a square wave which represents the DBS signal
     # Needs to be initialized to zero when unused to prevent
